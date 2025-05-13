@@ -8,6 +8,8 @@ const router = express.Router();
 // Login route
 router.post('/login', async (req, res) => {
   try {
+    console.log('HEADERS:', req.headers);
+    console.log('BODY:', req.body);
     const { email, password } = req.body;
     
     // Find user by email

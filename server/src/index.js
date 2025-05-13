@@ -6,12 +6,12 @@ const authRoutes = require('./routes/auth');
 
 const app = express();
 
+app.use(express.json());
 // Middleware
 app.use(cors({
   origin: "https://patient-dashboard-client.vercel.app",
   credentials: true
 }));
-app.use(express.json());
 
 // Connect to MongoDB
 mongoose.connect(process.env.MONGODB_URI)
