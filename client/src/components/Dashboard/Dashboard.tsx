@@ -1,22 +1,45 @@
-import { FC } from 'react';
+import { useEffect, useState, type FC } from 'react';
 import './Dashboard.css';
 import Navbar from './Navbar';
 import WeightCard from './WeightCard';
 import WeightProgress from './WeightProgress';
 
 const Dashboard: FC = () => {
-  const dummyData = {
-    userName: 'Jane Smith',
-    currentWeight: 157,
-    weightLoss: 25,
-    weightLossPercentage: 13.7,
-    targetWeight: 145,
-    nextShipment: {
-      date: '2023-11-05',
-      weight: '1.0mg',
-      status: 'In Transit'
-    }
-  };
+  const [user, setUser] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      setLoading(true);
+      setError('');
+      try {
+        const token = localStorage.getItem('token');
+        const res = await fetch('http://localhost:5000/api/auth/me', {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        if (!res.ok) throw new Error('Failed to fetch user data');
+        const data = await res.json();
+        setUser(data);
+      } catch (err: any) {
+        setError(err.message || 'Error fetching user data');
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchUser();
+  }, []);
+
+  if (loading) return <div className="dashboard"><Navbar /><main className="dashboard-content"><p>Loading...</p></main></div>;
+  if (error) return <div className="dashboard"><Navbar /><main className="dashboard-content"><p style={{color: 'red'}}>{error}</p></main></div>;
+  if (!user) return null;
+
+  // Calculate weight loss and percentage
+  const startWeight = user.weightHistory?.[0]?.weight || user.startWeight;
+  const weightLoss = startWeight - user.currentWeight;
+  const weightLossPercentage = startWeight ? (weightLoss / startWeight) * 100 : 0;
 
   return (
     <div className="dashboard">
@@ -24,25 +47,25 @@ const Dashboard: FC = () => {
       <main className="dashboard-content">
         <div className="dashboard-header">
           <h1>Dashboard Overview</h1>
-          <p>Welcome back, {dummyData.userName}!</p>
+          <p>Welcome back, {user.firstName} {user.lastName}!</p>
           <p className="subtitle">Here's a summary of your weight loss journey and upcoming shipments.</p>
         </div>
 
         <div className="dashboard-cards">
           <WeightCard
             title="Current Weight"
-            weight={dummyData.currentWeight}
-            weightLoss={dummyData.weightLoss}
-            weightLossPercentage={dummyData.weightLossPercentage}
+            weight={user.currentWeight}
+            weightLoss={weightLoss}
+            weightLossPercentage={Number(weightLossPercentage)}
           />
           <WeightCard
             title="Target Weight"
-            weight={dummyData.targetWeight}
+            weight={user.targetWeight}
             showProgress
           />
           <WeightCard
             title="Next Shipment"
-            shipment={dummyData.nextShipment}
+            shipment={user.nextShipment}
           />
         </div>
 

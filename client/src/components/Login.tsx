@@ -41,7 +41,7 @@ const Login = () => {
   return (
     <div className="login-container">
       <div className="login-content">
-        <h1 className="login-title">Acme Health</h1>
+        <h1 className="login-title">Assessment Health</h1>
         <p className="login-subtitle">Weight Management Platform</p>
         
         <div className="login-card">
