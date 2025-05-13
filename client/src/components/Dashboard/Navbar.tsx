@@ -1,11 +1,21 @@
 import { type FC } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './Navbar.css';
 
 const Navbar: FC = () => {
+  const navigate = useNavigate();
+
+  const handleLogout = (e: React.MouseEvent) => {
+    e.preventDefault();
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    navigate('/login');
+  };
+
   return (
     <nav className="navbar">
       <div className="navbar-brand">
-        <a href="/" className="brand">Acme Health</a>
+        <a href="/" className="brand">Assessment Health</a>
       </div>
       
       <div className="navbar-menu">
@@ -28,7 +38,7 @@ const Navbar: FC = () => {
           <i className="icon-profile"></i>
           Profile
         </a>
-        <a href="/logout" className="nav-item">
+        <a href="/logout" className="nav-item" onClick={handleLogout}>
           <i className="icon-logout"></i>
           Logout
         </a>
