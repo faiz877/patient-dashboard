@@ -14,11 +14,11 @@ const ProfilePage = () => (
         <div style={{display: 'flex', flexDirection: 'column', gap: 20}}>
           <div>
             <label style={{color: '#6b7280', fontWeight: 500}}>Name</label>
-            <div style={{fontSize: 18, color: '#111827', marginTop: 4}}>Jane Smith</div>
+            <div style={{fontSize: 18, color: '#111827', marginTop: 4}}>John Doe</div>
           </div>
           <div>
             <label style={{color: '#6b7280', fontWeight: 500}}>Email</label>
-            <div style={{fontSize: 18, color: '#111827', marginTop: 4}}>jane.smith@example.com</div>
+            <div style={{fontSize: 18, color: '#111827', marginTop: 4}}>john.doe@example.com</div>
           </div>
           <div>
             <label style={{color: '#6b7280', fontWeight: 500}}>Password</label>
